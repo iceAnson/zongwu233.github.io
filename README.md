@@ -1,3 +1,5 @@
-#zongwu233'blog
-2333
-blog 搭建fork了 http://beiyuu.com/github-pages/
+#一点点说明
+zongwu233'blog
+
+搭建步骤参照http://beiyuu.com/github-pages/
+模板完全来自[BeiYuu.com](http://beiyuu.com)
