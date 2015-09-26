@@ -1,7 +1,7 @@
 ---
 layout: post
 title: 胡言乱语说简单
-category: opinion
+category: beiyuu.blog
 description: 胡言乱语而已，看看就好。
 ---
 
