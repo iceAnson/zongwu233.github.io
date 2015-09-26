@@ -1,2 +1,11 @@
-encoding: UTF-8
-baseurl: /
+auto: true
+
+markdown: rdiscount
+pygments: true
+paginate: 8
+permalink: /:title
+
+title: Zongwu233.com
+url: http://zongwu233.github.io
+feed: /atom.xml
+author_info: <a href="http://beiyuu.com/">Zongwu233</a>
