@@ -39,6 +39,7 @@ a.external {padding-right:13px;background:url('/images/icons.gif') no-repeat rig
 a.external:hover {background-position:right -15px;}
 .entry-title,.entry-title a {font-size:30px;font-weight:bold;margin-bottom:6px;color:#000;text-align:center;word-wrap: break-word;}
 .entry-title a:hover {text-decoration:none;}
+.entry-author {text-align:center;color:#999;margin-bottom:5px;font-size:14px;}
 .entry-date {text-align:center;color:#999;margin-bottom:60px;font-size:14px;}
 
 h2 {font-size:22px;font-weight:bold;margin-bottom:25px;}
@@ -70,6 +71,17 @@ pre ol{margin-left:25px;list-style-type:decimal;}
 .entry blockquote{margin-left:25px;font-size:14px;font-style:italic}
 .entry img{max-width:670px;display:block;margin:10px auto;}
 
+.divider{
+    height:1px;
+    width:100%;
+    overflow:hidden;
+    background: #e8e8e8;
+    margin-top:30px;
+}
+
+.license{ margin-top:30px; line-height:200% }
+
+.discuss{margin-top:30px;  }
 
 .index-content .aside {
     position: fixed;
