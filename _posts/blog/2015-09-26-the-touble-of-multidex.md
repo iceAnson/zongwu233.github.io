@@ -152,6 +152,8 @@ Application的 onattach（）方法调用，这时候MultiDex.install（）调�
 2.该方案不关注Application被哪个组件启动。Activity ，Service ，Receiver ，ContentProvider 都满足。<br/> 
 3.该方案不限制 Application ，Activity ，Service ，Receiver ，ContentProvider 继续新增业务。<br/> 
 于是总悟君实现了这篇文章最后介绍的改进版的方法，稍微有一点点扩充。<br/>
+
+流程图如下
 <!---
 看图：<br/>
 ```seq
@@ -169,6 +171,7 @@ Note right of MainProcess : Application.onCreate()
 Note right of MainProcess : WelcomActivity onCreate()
 ```
 ---->
+![方案的流程图](http://7xn3gz.com1.z0.glb.clouddn.com/image/github/zongwu233multiDex-process.png)
 上最终解决问题版的代码！<br/>
 在Application里面(这里不要再继承自multiApplication了，我们要手动加载Dex):<br/>
 
