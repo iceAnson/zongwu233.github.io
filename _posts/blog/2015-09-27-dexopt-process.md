@@ -6,7 +6,7 @@ category: blog
 ---
 
 关于dexopt的预备知识在[这里][]。  
-一般都是从AndroidStudio run出来的apk安装到手机，这里从 adb pm -r install xxx.apk 开始看起：  
+一般都是从AndroidStudio run出来的apk安装到手机，这里从 adb shell pm install -r xxx.apk 开始看起：  
 找到android/frameworks/base/cmds/pm/src/com/android/commands/pm/pm.java pm命令的源码  
 main函数调用了new Pm().run(args);  
 找到 runInstall（）方法  
