@@ -124,7 +124,7 @@ android.applicationVariants.all {
 ------
 问题又来了！这次不仅仅是2.3 的机型！还有一些中档配置的4.x系统的机型。问题现象是：第一次安装后，点击图标，1s，2s，3s... 程序没有任何反应就好像你没点图标一样。<br/>
 5s过去。。。程序ANR! <br/>
-还让不让人快点回家安心地看动漫？<br/>
+其实不仅仅是总悟君的App存在这个问题，其他很多App也存在首次安装运行也出现好几秒无任何响应的现象或者最后NAR了。这里表现最好的就是美团App，点击图标立马就出现界面。唉要不就算啦？反正就一次。。。不行，这可是产品给用户的第一印象啊太重要了，而且美团搞得定就说明这问题有解决方案。<br/>
 ANR了是不是局限1描述的现象？？不过也不重要...因为Google只是告诉你说第二个dex太大了导致的。并没有进一步解释根本原因。怎么办？Google一发？搜索点击图标 然后ANR？怎么可能有解决方案嘛。ANR就意味着UI线程被阻塞了，老老实实查看log吧。<br/>
 adb logcat -v time > log.txt<br/>
 于是发现 是 install dex + dexopt 时间太长！<br/>
@@ -140,8 +140,8 @@ Application的 onattach（）方法调用，这时候MultiDex.install（）调�
 可以试一试。<br/>
 但是有几个问题需要解决：<br/>
 1.分析主dex需要的classes这个脚本比较难写。。。Google文档说过这个问题比较复杂， 而且buildTools 不是已经帮我们搞定了吗？去瞄一下主dex的大小：8M 以及secondary.dex 3M 。 它是如何工作的？文档说dx的时候，先依据manifest里注册的组件生成一个 main-list，然后把这list里的classes所依赖的classes找出来，把他们打成classes.dex就是主dex。剩下的classes都放clsses2.dex(如果使用参数限制dex大小的话可能会有classe3.ex 等等） 。主dex至少含有main-list 的classes + 直接依赖classes ，使用mini-main-list参数可以仅仅包含刚才说的classes。<br/>
-关于写分析脚本的思路是：直接使用mini-main-list参数获取build目录下的main-list文件，这样manifest声明的类和他们的直接依赖类搞定的了，那后者的直接依赖类怎么解？这些在dvk runtime也是必须的classes。一个思路是解析class文件获得该class的依赖类。还一个思路是自己使用Dexclassloader 加载dex，然后hook getClass()方法，调用一次就记录一个。都挺折腾的。
-2.由于历史原因，总悟君在维护的App的manifest注册的组件的那些类，承载业务太多，依赖很多三方jar，导致直接依赖类非常多，而且短时间内无法梳理精简。没办法mini化主dex。而如果主dex过大可能会导致linearAlloc的bug。<br/>
+关于写分析脚本的思路是：直接使用mini-main-list参数获取build目录下的main-list文件，这样manifest声明的类和他们的直接依赖类搞定的了，那后者的直接依赖类怎么解？这些在dvk runtime也是必须的classes。一个思路是解析class文件获得该class的依赖类。还一个思路是自己使用Dexclassloader 加载dex，然后hook getClass()方法，调用一次就记录一个。都挺折腾的。<br/>
+2.由于历史原因，总悟君在维护的App的manifest注册的组件的那些类，承载业务太多，依赖很多三方jar，导致直接依赖类非常多，而且短时间内无法梳理精简，没办法mini化主dex。<br/>
 3.Application的启动入口太多。Appication初始化未必是由launcher Activity的启动触发，还有可能是因为Service ，Receiver ，ContentProvider 的启动。 靠拦截重写Instrumentation execStartActivity  解决不了问题。要为 Service ，Receiver ，ContentProvider 分别写基类，然后在oncreate()里判断是否要异步加载secondary.dex。如果需要，弹出Loading Acitvity？用户看到这个会感觉比较怪异。<br/>
 结合自身App的实际情况来看美团的拆包方案虽然很美好然但是不能照搬啊。果然不能愉快地回家看动漫了。
 第四回合 换一种思路
@@ -173,7 +173,7 @@ Note right of MainProcess : WelcomActivity onCreate()
 ---->
 ![方案的流程图](http://7xn3gz.com1.z0.glb.clouddn.com/image/github/zongwu233multiDex-process.png)
 上最终解决问题版的代码！<br/>
-在Application里面(这里不要再继承自multiApplication了，我们要手动加载Dex):<br/>
+在Application里面(这里不要再继承自MultiApplication了，我们要手动加载Dex):<br/>
 
 ```java
 public class App extends Application {
