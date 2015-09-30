@@ -34,7 +34,7 @@ DefaultHttpClient client = getHttpClient(httpPost.getURI().toString());
 设置好wifi热点，手机连到该wifi上，开始抓包。
 出现问题的包是这样的
 ![图片](http://7xn3gz.com1.z0.glb.clouddn.com/204-response-with-null.png)
-reassembled TCP Segments 149 bytes?		
+2 reassembled TCP Segments 149 bytes?		
 查看 \#44005 最后的4个bytes就是null。而这个\#44005是上一次的HTTP 204返回结果的TCP序号。\#44005的数据已经发送到了客户端，为何最后4个bytes再次被算进来了？？
 让我们先去看看HTTP 1.1对204返回值的[规范](http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html):		
 
